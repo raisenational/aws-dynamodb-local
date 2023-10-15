@@ -1,6 +1,7 @@
 {
   "extends": "@tsconfig/node-lts-strictest/tsconfig.json",
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "vitest.config.ts",
   ],
 }

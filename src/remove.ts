@@ -30,6 +30,7 @@ export const remove = async (arg0?: (() => unknown) | Partial<RemoveOptions>, ar
   const installPath = arg0?.installPath ?? resolve(defaultInstallPath);
 
   rmSync(installPath, { recursive: true, force: true });
+  // eslint-disable-next-line no-console
   console.log('Removal of DynamoDB Local complete.');
 
   if (arg0?.onComplete) {

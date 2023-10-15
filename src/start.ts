@@ -148,7 +148,8 @@ const wrapSpawn = (executable: string, args: string[], cwd?: string) => {
 
   child.on('close', (code) => {
     if (code !== null && code !== 0) {
-      console.log('DynamoDB Local exited with code', code);
+      // eslint-disable-next-line no-console
+      console.error('DynamoDB Local exited with code', code);
     }
   });
 

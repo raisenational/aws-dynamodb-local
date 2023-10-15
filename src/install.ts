@@ -33,8 +33,10 @@ export const install = async (arg0?: (() => unknown) | Partial<InstallOptions>, 
   const installPath = arg0?.installPath ?? resolve(defaultInstallPath);
 
   if (!existsSync(join(installPath, jarFilename))) {
+    // eslint-disable-next-line no-console
     console.log(`Installing DynamoDB Local from ${downloadUrl}...`);
     await downloadTarGz(downloadUrl, installPath);
+    // eslint-disable-next-line no-console
     console.log('Installation of DynamoDB Local complete.');
   }
 
