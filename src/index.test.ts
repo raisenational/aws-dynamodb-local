@@ -65,6 +65,36 @@ test('install, start, stop, remove', async () => {
   expect(existsSync(join(path, jarFilename))).toBe(false);
 });
 
+test('docker: start, stop', async () => {
+  // When
+  await start({ port, docker: true });
+
+  // Then we can use DynamoDB (after a short delay)
+  const tablesBefore = await dbClient.send(new ListTablesCommand({}));
+  expect(tablesBefore.TableNames).not.toContain('TestTable');
+  await dbClient.send(new CreateTableCommand({
+    TableName: 'TestTable',
+    AttributeDefinitions: [
+      { AttributeName: 'id', AttributeType: 'S' },
+    ],
+    KeySchema: [
+      { AttributeName: 'id', KeyType: 'HASH' },
+    ],
+    ProvisionedThroughput: {
+      ReadCapacityUnits: 1,
+      WriteCapacityUnits: 1,
+    },
+  }));
+  const tablesAfter = await dbClient.send(new ListTablesCommand({}));
+  expect(tablesAfter.TableNames).toContain('TestTable');
+
+  // When
+  await stop(port);
+
+  // Then we can't use DynamoDB
+  expect(() => dbClient.send(new ListTablesCommand({}))).rejects.toThrow();
+});
+
 // Always ensure the server is stopped after: prevents test failures leaving zombie java processes around.
 afterAll(async () => {
   await stop(port);

@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process';
+import { spawn, ChildProcess } from 'node:child_process';
 import { resolve } from 'node:path';
 import { env } from 'node:process';
 import { get } from 'node:http';
@@ -128,7 +128,7 @@ export const start = async (customOptions?: Partial<StartOptions>): Promise<void
 
   instances.set(options.port, { options, process });
 
-  await waitFor(() => dynamoDBLocalIsReady(options.port));
+  await waitFor(() => dynamoDBLocalIsReady(process, options.port));
 };
 
 const wrapSpawn = (executable: string, args: string[], cwd?: string) => {
@@ -146,13 +146,6 @@ const wrapSpawn = (executable: string, args: string[], cwd?: string) => {
     throw error;
   });
 
-  child.on('close', (code) => {
-    if (code !== null && code !== 0) {
-      // eslint-disable-next-line no-console
-      console.error('DynamoDB Local exited with code', code);
-    }
-  });
-
   return child;
 };
 
@@ -164,7 +157,11 @@ const waitFor = async (isComplete: () => Promise<boolean>): Promise<void> => {
   }
 };
 
-const dynamoDBLocalIsReady = (port: number): Promise<boolean> => {
+const dynamoDBLocalIsReady = (process: ChildProcess, port: number): Promise<boolean> => {
+  if (process.exitCode) {
+    throw new Error(`DynamoDB Local exited with code ${process.exitCode}`);
+  }
+
   return new Promise((res) => {
     const req = get(`http://localhost:${port}/`, (message) => {
       res(message.statusCode === 400);
