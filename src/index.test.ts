@@ -67,9 +67,5 @@ test('install, start, stop, remove', async () => {
 
 // Always ensure the server is stopped after: prevents test failures leaving zombie java processes around.
 afterAll(async () => {
-  try {
-    await stop(port);
-  } catch (error) {
-    // no-op
-  }
+  await stop(port);
 });
