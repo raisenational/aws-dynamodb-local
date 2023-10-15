@@ -115,7 +115,7 @@ export const start = async (customOptions?: Partial<StartOptions>): Promise<void
   }
 
   const commonArgs = ['-jar', jarFilename, '-port', String(options.port)];
-  const dockerArgs = ['run', '-d', '-p', `${options.port}:${options.port}`, options.dockerImage];
+  const dockerArgs = ['run', '-p', `${options.port}:${options.port}`, options.dockerImage];
   if (options.install_path) {
     deprecation('Use installPath instead of install_path');
   }
