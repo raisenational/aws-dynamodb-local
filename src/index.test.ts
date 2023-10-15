@@ -1,6 +1,7 @@
 import { afterAll, expect, test } from 'vitest';
 import { join, resolve } from 'node:path';
 import { existsSync } from 'node:fs';
+import { setTimeout } from 'node:timers/promises';
 import { DynamoDBClient, CreateTableCommand, ListTablesCommand } from '@aws-sdk/client-dynamodb';
 import { install } from './install';
 import { jarFilename } from './constants';
@@ -54,6 +55,7 @@ test('install, start, stop, remove', async () => {
 
   // When
   await stop(port);
+  await setTimeout(500);
 
   // Then we can't use DynamoDB
   expect(() => dbClient.send(new ListTablesCommand({}))).rejects.toThrow();
@@ -90,6 +92,7 @@ test('docker: start, stop', async () => {
 
   // When
   await stop(port);
+  await setTimeout(500);
 
   // Then we can't use DynamoDB
   expect(() => dbClient.send(new ListTablesCommand({}))).rejects.toThrow();
