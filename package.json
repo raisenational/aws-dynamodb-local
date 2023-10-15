@@ -1,6 +1,6 @@
 {
   "name": "aws-dynamodb-local",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Run DynamoDB local for development and testing",
   "license": "MIT",
   "author": "Adam Jones (domdomegg)",
