@@ -120,7 +120,7 @@ export const start = async (customOptions?: Partial<StartOptions>): Promise<void
 
   const commonArgs = ['-jar', jarFilename, '-port', String(options.port)];
   const dockerArgs = ['run', '-p', `${options.port}:${options.port}`];
-  if(options.dockerRemove) {
+  if (options.dockerRemove) {
     dockerArgs.push('-rm');
   }
   dockerArgs.push(options.dockerImage);
