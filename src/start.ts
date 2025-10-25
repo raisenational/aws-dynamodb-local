@@ -47,6 +47,9 @@ export interface StartOptions {
   /** If docker enabled, docker image to run. @default "amazon/dynamodb-local" */
   dockerImage: string,
 
+  /** If docker enabled, remove the container after stopping. @default false */
+  dockerRemove: boolean,
+
   /** Folder where DynamoDB Local is installed to. @default ".dynamodb" */
   installPath: string,
 
@@ -68,6 +71,7 @@ const defaultOptions: StartOptions = {
   docker: false,
   dockerPath: 'docker',
   dockerImage: 'amazon/dynamodb-local',
+  dockerRemove: false,
   installPath: defaultInstallPath,
   install_path: undefined,
 };
@@ -115,7 +119,11 @@ export const start = async (customOptions?: Partial<StartOptions>): Promise<void
   }
 
   const commonArgs = ['-jar', jarFilename, '-port', String(options.port)];
-  const dockerArgs = ['run', '-p', `${options.port}:${options.port}`, options.dockerImage];
+  const dockerArgs = ['run', '-p', `${options.port}:${options.port}`];
+  if(options.dockerRemove) {
+    dockerArgs.push('-rm');
+  }
+  dockerArgs.push(options.dockerImage);
   if (options.install_path) {
     deprecation('Use installPath instead of install_path');
   }

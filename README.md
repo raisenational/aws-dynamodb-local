@@ -97,6 +97,9 @@ interface StartOptions {
   /** If docker enabled, docker image to run. @default "amazon/dynamodb-local" */
   dockerImage: string,
 
+  /** If docker enabled, remove the container after stopping. @default false */
+  dockerRemove: boolean,
+
   /** Folder where DynamoDB Local is installed to. @default ".dynamodb" */
   installPath: string,
 
