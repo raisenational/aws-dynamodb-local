@@ -32,7 +32,7 @@ test('install, start, stop, remove', async () => {
 	expect(existsSync(join(path, jarFilename))).toBe(true);
 
 	// When
-	await start({installPath: path, port, docker: false});
+	await start({installPath: path, port});
 
 	// Then we can use DynamoDB (after a short delay)
 	const tablesBefore = await dbClient.send(new ListTablesCommand({}));
